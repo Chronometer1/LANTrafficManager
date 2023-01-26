@@ -22,7 +22,7 @@ button_exit.grid(row = 3, column = 1, pady = (100,2), padx = 4, sticky = SW)
 
 label_buffer = Label(window, width = 35, height = 13, bg = "blue")
 label_buffer.grid(column = 2, row = 0, rowspan = 4)
-
+window.mainloop()
 
 
 
