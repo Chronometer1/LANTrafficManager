@@ -2,6 +2,12 @@ import tkinter as tk
 from tkinter import *
 from tkinter import ttk
 from tkinter import filedialog
+import matplotlib
+matplotlib.use("TkAgg")
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+import matplotlib.pyplot as plt
+from matplotlib.animation import FuncAnimation
+plt.cla()
 
 LARGE_FONT= ("Verdana", 12)
 
@@ -12,7 +18,7 @@ class TrafficMonitor(tk.Tk):
         
         tk.Tk.__init__(self, *args, **kwargs)
         tk.Tk.wm_title(self,"Network traffic monitor")
-        tk.Tk.wm_geometry(self,"500x300")
+        tk.Tk.wm_geometry(self,"650x400")
         container=ttk.Frame(self,height=100,width=100)
         container.pack(side="top",fill="both",expand=True)
         container.grid_rowconfigure(100, weight=1)
@@ -42,6 +48,15 @@ class HomeScreen(ttk.Frame):
         
         def browseFiles():
             filename = filedialog.askopenfilename(initialdir = "/", title = "Select a File", filetypes = (("Text files", "*.txt*"),("all files", "*.*")))
+        
+        
+        self.plot_frame = tk.Frame(self)
+        self.plot_frame.pack(side="right", fill="both", expand=False)
+
+        self.fig, self.ax = plt.subplots(figsize=(5, 5))
+        self.canvas = FigureCanvasTkAgg(self.fig, self.plot_frame)
+        self.canvas.get_tk_widget().pack(side="top", fill="both", expand=True)
+        
 
         button_tfc = ttk.Button(self, text = "Train from capture", command = browseFiles)
         button_tfc.pack(pady = 5,anchor=W)
@@ -73,4 +88,3 @@ class Settings(ttk.Frame):
 
 app = TrafficMonitor()
 app.mainloop()
-
