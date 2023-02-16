@@ -64,7 +64,7 @@ class HomeScreen(ttk.Frame):
         #Create toolbar for buttons 
         toolbar = Frame(self,bg="darkorange")
 
-        label_Title = tk.Label(toolbar,bg="seashell3",text = "NUWC Newtork Traffic Monitor",font=LARGE_FONT)
+        label_Title = tk.Label(toolbar,bg="seashell3",text = "NUWC Network Traffic Monitor",font=LARGE_FONT)
         label_Title.pack(pady=10,side=TOP)
 
         button_set = tk.Button(toolbar,bg="seashell3", text = "Options", command = lambda:controller.show_frame(Settings)) 
