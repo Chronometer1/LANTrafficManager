@@ -1,0 +1,62 @@
+import sqlite3
+import time 
+
+conn = sqlite3.connect('database.db')
+c = conn.cursor()
+
+
+c.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='table1'")
+result = c.fetchone()
+if result:
+    print("Table 'table1' already exists")
+else:
+    # Create table 1
+    c.execute('''CREATE TABLE table1
+                 (ID INT, max_depth INT, n_estimators INT, random_state INT, max_features INT,
+                  min_samples_split INT, max_leaf_nodes INT, threshold REAL)''')
+    print("Table 'table1' created")
+
+
+c.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='table2'")
+result = c.fetchone()
+if result:
+    print("Table 'table2' already exists")
+else:
+    # Create table 2
+    c.execute('''CREATE TABLE table2
+                 (ID INT, ip_address INT, packet_timestamp INT, flag_counter INT, duration INT,
+                  rate INT, state INT, dload INT, dloss INT, classification INT)''')
+    print("Table 'table2' created")
+
+
+conn.commit()
+conn.close()
+
+
+conn = sqlite3.connect('database.db')
+c = conn.cursor()
+
+
+
+# Connect to the database
+conn = sqlite3.connect('database.db')
+c = conn.cursor()
+
+# Define the threshold value
+threshold_value = 10
+
+# Trigger, still have to figure out how to send or print the message properly after its above the threshold
+c.execute("""
+    CREATE TRIGGER flag_counter_trigger
+    AFTER UPDATE OF flag_counter ON table2
+    BEGIN
+        IF NEW.flag_counter >= {} THEN
+            
+            PRINT 'Flag counter exceeded threshold: ' || NEW.flag_counter || ', IP address: ' || NEW.ip_address;
+        END IF;
+    END;
+""".format(threshold_value))
+
+# Commit the changes and close the connection
+conn.commit()
+conn.close()
