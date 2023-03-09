@@ -68,34 +68,35 @@ MaxLea = tk.StringVar()
 AbnThr = tk.StringVar()
 
 max_depth = tk.Entry(Settings,textvariable=maxDep)
-max_depth.pack(pady=10)
+max_depth.pack(fill='both',pady=10)
 maxDep.set("Enter value for max depth")
 
 Num_Est = tk.Entry(Settings,textvariable=numEst)
-Num_Est.pack(pady=10)
+Num_Est.pack(fill='both',pady=10)
 numEst.set("Enter Value for Number of Estimates")
 
 Random_St = tk.Entry(Settings,textvariable=ranSta)
-Random_St.pack(pady=10)
+Random_St.pack(fill='both',pady=10)
 ranSta.set("Enter Random State")
 
 Max_Fea = tk.Entry(Settings,textvariable=MaxFea)
-Num_Est.pack(pady=10)
+Max_Fea.pack(fill='both',pady=10)
 MaxFea.set("Enter the max Features")
 
-Num_Est = tk.Entry(Settings,textvariable=numEst)
-Num_Est.pack(pady=10)
-numEst.set("Enter Value for Number of Estimates")
+Min_Sam = tk.Entry(Settings,textvariable=MinSam)
+Min_Sam.pack(fill='both',pady=10)
+MinSam.set("Enter Minimum Samples")
 
-Num_Est = tk.Entry(Settings,textvariable=numEst)
-Num_Est.pack(pady=10)
-numEst.set("Enter Value for Number of Estimates")
+Max_Lea = tk.Entry(Settings,textvariable=MaxLea)
+Max_Lea.pack(fill='both',pady=10)
+MaxLea.set("Enter Max Layers")
 
-Num_Est = tk.Entry(Settings,textvariable=numEst)
-Num_Est.pack(pady=10)
-numEst.set("Enter Value for Number of Estimates")
+Abn_Thr = tk.Entry(Settings,textvariable=AbnThr)
+Abn_Thr.pack(fill='both',pady=10)
+AbnThr.set("Enter Abnormality Threashold")
 
-
+Apply = tk.Button(Settings,text="Apply")
+Apply.pack()
 
 
 
