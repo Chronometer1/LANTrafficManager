@@ -34,6 +34,8 @@ import pickle
 
 
 
+global prediction
+
 
 
 # Set up UI window
@@ -248,19 +250,23 @@ line, = ax.plot(x_vals, y_vals)
 
 # Define animation function
 
-def animate(prediction):
+def animate(i,prediction): 
 
     if capture_data:
 
         x_vals.append(next(index))
 
-        y_vals.append(next(prediction))
+        y_vals.append(prediction)
 
         line.set_data(x_vals, y_vals)
 
         ax.relim()
 
         ax.autoscale_view()
+
+        plt.pause(0.01)
+
+        canvas.draw()
 
     return line,
 
@@ -270,15 +276,13 @@ def animate(prediction):
 
 index = count()
 
-ani = FuncAnimation(fig, animate, frames=None, interval=0)
-
 
 
 # Create canvas and add to UI window
 
 canvas = FigureCanvasTkAgg(fig, master=label_buffer)
 
-canvas.draw()
+# canvas.draw()
 
 canvas.get_tk_widget().pack(expand=True, fill=tk.BOTH)
 
@@ -440,9 +444,11 @@ def predict():
 
 	                        prediction = trained_model.predict(ml_df)
 
+	                        animate(None,prediction)
+
 	                        print(prediction)
 
-	                        animate(prediction)
+	                        # animate(prediction)
 
 	                        if (prediction >= abnormality_threshold): {
 
