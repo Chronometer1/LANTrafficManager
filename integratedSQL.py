@@ -32,6 +32,8 @@ import json
 
 import pickle
 
+from tkinter import messagebox
+
 import sqlite3
 
 #Connect to DB
@@ -76,16 +78,28 @@ c = conn.cursor()
 conn = sqlite3.connect('database.db')
 c = conn.cursor()
 
-# Define the threshold value
-threshold_value = 10
 
-# Creates a connection log table to store ID's
-c.execute("""
-    CREATE TABLE IF NOT EXISTS connection_log (
-        ID INT,
-        timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
-    )
-""")
+
+# Create increment_flag_counter trigger
+c.execute('''
+    CREATE TRIGGER increment_flag_counter
+    AFTER INSERT ON connections
+    BEGIN
+      UPDATE table2
+      SET flag_counter = flag_counter + 1
+      WHERE ip_address = NEW.ip_address;
+    END;
+''')
+
+def check_flag_counter():
+    for row in table2.get_children():
+        ip_address = table2.item(row, "values")[0]
+        flag_counter = int(table2.item(row, "values")[2])
+        if flag_counter > 5:
+            messagebox.showinfo("Flag Counter Alert", f"IP address with flag counter above threshold: {ip_address}")
+            break
+
+
 
 
 global prediction
@@ -309,7 +323,7 @@ def animate(i,prediction):
 
         canvas.draw()
 
-    return line,
+        check_flag_counter()
 
        
 
@@ -491,11 +505,29 @@ def predict():
 
 	                        # animate(prediction)
 
-	                        if (prediction >= abnormality_threshold): {
+	                        if prediction >= abnormality_threshold:
+                                ip_address = content.get('id.orig_h')
 
-	                            # send data to DB to be stored and displayed on UI
+                                # Check if the IP address already exists in the table
+                                c.execute("SELECT flag_counter FROM table2 WHERE ip_address = ?", (ip_address,))
+                                row = c.fetchone()
 
-	                        }
+                                if row:
+                                    # If the IP address exists, increment the flag_counter value
+                                    updated_flag_counter = row[0] + 1
+                                    c.execute("UPDATE table2 SET flag_counter = ? WHERE ip_address = ?", (updated_flag_counter, ip_address))
+                                else:
+                                    # If the IP address doesn't exist, insert a new record with flag_counter set to 1
+                                    c.execute("INSERT INTO table2 (ip_address, classification, flag_counter) VALUES (?, ?, ?)", (ip_address, prediction, 1))
+                                
+                                conn.commit()
+
+
+
+
+	                            
+
+	                        
 
 
 
